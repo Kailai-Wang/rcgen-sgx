@@ -20,8 +20,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let cert = Certificate::from_params(params)?;
 	let pem_serialized = cert.serialize_pem()?;
-	let der_serialized = pem::parse(&pem_serialized).unwrap().contents;
-	let hash = ring::digest::digest(&ring::digest::SHA512, &der_serialized);
+	let p = pem::parse(&pem_serialized).unwrap();
+	let der_serialized = p.contents();
+	let hash = ring::digest::digest(&ring::digest::SHA512, der_serialized);
 	let hash_hex :String = hash.as_ref().iter()
 		.map(|b| format!("{:02x}", b))
 		.collect();
@@ -30,7 +31,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("{}", cert.serialize_private_key_pem());
 	std::fs::create_dir_all("certs/")?;
 	fs::write("certs/cert.pem", &pem_serialized.as_bytes())?;
-	fs::write("certs/cert.der", &der_serialized)?;
+	fs::write("certs/cert.der", der_serialized)?;
 	fs::write("certs/key.pem", &cert.serialize_private_key_pem().as_bytes())?;
 	fs::write("certs/key.der", &cert.serialize_private_key_der())?;
 	Ok(())
