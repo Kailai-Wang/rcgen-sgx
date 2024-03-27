@@ -67,4 +67,4 @@ std = [
 ]
 
 [patch."https://github.com/apache/teaclave-sgx-sdk.git"]
-sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", branch = "v2.0.0-preview-11-17" }
+sgx_tstd = { git = "https://github.com/apache/incubator-teaclave-sgx-sdk", branch = "v2.0.0-preview" }
